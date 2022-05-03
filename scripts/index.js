@@ -1,19 +1,3 @@
-/* 
-<div class="grid-item">
-<span class="span-dto">$3.25 dto.</span>
-<img src="images/products/aguacate.png" alt="">
-<div class="grid-item-container">
-    <h4>$26.82/kg <span class="span-price-old">$39.9/kg</span></h4>
-    <p>Limon con semilla</p>
-</div>
-<button class="btn btn-primary hero__cta">Agregar</button>
-</div>
-*/
-
-// import showProductsCarrito from "./Carrito";
-
-
-
 const d = document;
 const btnPayStyled = d.querySelectorAll('.btn-pay');
 const ls = localStorage;
@@ -79,7 +63,7 @@ const showModalProduct = async (id) => {
   const sugerencias = data.filter((el) => el.id !== result);
   localStorage.setItem("producto", JSON.stringify(result));
   modal.classList.add("modal--show");
-
+  $containerBoxDetail.innerHTML = '';
   result.forEach((el) => {
       const {id, title, description, image, price} = el;
       $containerBoxDetail.innerHTML = `
@@ -93,8 +77,9 @@ const showModalProduct = async (id) => {
                         <div class="modal__box-details">
                             <label for="quality"><b>Selecciona la madurez que desees</b></label>
                             <select class="modal__select" name="" id="">
+                                <option value="">Normal</option>
                                 <option value="">Maduro</option>
-                               
+                                <option value="">Reciente</option>
                             </select>
                             <div class="modal__box-actions">
                                 <button class="btn">+</button>
@@ -108,6 +93,8 @@ const showModalProduct = async (id) => {
       `;
   })
 
+  $containerSugerencias.innerHTML = '';
+
   sugerencias.forEach((el) => {
     const { id, title, description, image, price } = el;
     $containerSugerencias.innerHTML += `
@@ -118,23 +105,19 @@ const showModalProduct = async (id) => {
                                 <h4>$26.82/kg <span class="span-price-old">${price}/kg</span></h4>
                                 <p>${title}</p>
                             </div>
-                            <button class="btn btn-primary">Agregar</button>
+                            <button class="btn btn-primary" onclick="showModalProduct(${id})">Agregar</button>
                         </div>
         `;
   });
 
 };
 
-//events
 
 const getCategory = async (category) => {
   const data = await getData(`${API}products/`);
   const filter = data.filter((el) => el.ofert === category);
   return filter;
 };
-
-
-
 
 d.addEventListener("DOMContentLoaded", async () => {
   let dataOffers = await getCategory(true);
@@ -148,10 +131,6 @@ $closeModal.addEventListener("click", (e) => {
   e.preventDefault();
   modal.classList.remove("modal--show");
 });
-
-
-
-
 
 
 //Clase carrito de compra
@@ -258,9 +237,6 @@ const getProducts = async () => {
 getProducts();
 
 //////////////////////////////// CARRITO ////////////////////////////////
-
-
-
 
 //btn actions
 
